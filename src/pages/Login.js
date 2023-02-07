@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
+import Loading from '../Loading';
 
 class Login extends React.Component {
   constructor() {
@@ -35,9 +36,9 @@ class Login extends React.Component {
   buttonClick = () => {
     const { history } = this.props;
     const { name } = this.state;
-    this.setState({ isLoading: true }, () => {
-      createUser({ name });
-      this.setState({ isLoading: false });
+    this.setState({ isLoading: true }, async () => {
+      await createUser({ name });
+      // this.setState({ isLoading: false });
       history.push('/search');
     });
   };
@@ -47,27 +48,26 @@ class Login extends React.Component {
     const { isNotValid } = this.state;
     const { isLoading } = this.state;
 
-    return (
-      <div data-testid="page-login">
-        <h1>Login</h1>
-        <form>
-          <input
-            onChange={ this.inputChange }
-            type="text"
-            data-testid="login-name-input"
-          />
-          <button
-            onClick={ isLoading
-              ? undefined
-              : this.buttonClick }
-            disabled={ isNotValid }
-            data-testid="login-submit-button"
-          >
-            Entrar
-          </button>
-        </form>
-      </div>
-    );
+    return isLoading
+      ? <Loading /> : (
+        <div data-testid="page-login">
+          <h1>Login</h1>
+          <form>
+            <input
+              onChange={ this.inputChange }
+              type="text"
+              data-testid="login-name-input"
+            />
+            <button
+              onClick={ this.buttonClick }
+              disabled={ isNotValid }
+              data-testid="login-submit-button"
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
+      );
   }
 }
 
