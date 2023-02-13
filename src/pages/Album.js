@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import Loading from '../Loading';
+import { addSong } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
   constructor() {
     super();
 
+    this.addToFavorite = this.addToFavorite.bind(this);
+
     this.state = {
       songList: [{}],
       isLoading: false,
-
     };
   }
 
@@ -30,6 +32,12 @@ class Album extends React.Component {
     });
   };
 
+  addToFavorite = (number) => {
+    const { songList } = this.state;
+    const track = songList.filter((obj) => obj.trackNumber === number);
+    addSong(track);
+  };
+
   render() {
     const { isLoading, songList } = this.state;
 
@@ -41,11 +49,10 @@ class Album extends React.Component {
           { songList.length <= 1
             ? <p>Álbum não encontrado.</p>
             : songList.map((obj) => {
-              if (obj.wrapperType === 'track') {
+              if (obj.kind === 'song') {
                 return (
                   <div key={ obj.trackName }>
-                    {console.log(obj.trackName)}
-                    <p>{ `Track Name ${obj.trackNumber}`}</p>
+                    {console.log(obj)}
                     <p>{obj.trackName}</p>
                     <audio
                       data-testid="audio-component"
@@ -58,6 +65,15 @@ class Album extends React.Component {
                       <code>audio</code>
                       .
                     </audio>
+                    <label htmlFor="favorite">
+                      Favoritar
+                      <input
+                        type="checkbox"
+                        label="Favoritar"
+                        name="favorite"
+                        onClick={ () => this.addToFavorite(obj.trackNumber) }
+                      />
+                    </label>
                   </div>
                 );
               }
