@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import Loading from '../Loading';
-import { addSong } from '../services/favoriteSongsAPI';
+// import { addSong } from '../services/favoriteSongsAPI';
+import MusicCard from '../components/MusicCard';
 
 class Album extends React.Component {
   constructor() {
     super();
 
-    this.addToFavorite = this.addToFavorite.bind(this);
+    // this.addToFavorite = this.addToFavorite.bind(this);
 
     this.state = {
       songList: [{}],
@@ -32,11 +33,14 @@ class Album extends React.Component {
     });
   };
 
-  addToFavorite = (number) => {
-    const { songList } = this.state;
-    const track = songList.filter((obj) => obj.trackNumber === number);
-    addSong(track);
-  };
+  // addToFavorite = (number) => {
+  //   this.setState({ isLoadingBox: true }, () => {
+  //     const { songList } = this.state;
+  //     const track = songList.filter((obj) => obj.trackNumber === number);
+  //     addSong(track);
+  //     this.setState({ isLoadingBox: false });
+  //   });
+  // };
 
   render() {
     const { isLoading, songList } = this.state;
@@ -50,32 +54,7 @@ class Album extends React.Component {
             ? <p>Álbum não encontrado.</p>
             : songList.map((obj) => {
               if (obj.kind === 'song') {
-                return (
-                  <div key={ obj.trackName }>
-                    {console.log(obj)}
-                    <p>{obj.trackName}</p>
-                    <audio
-                      data-testid="audio-component"
-                      src={ obj.previewUrl }
-                      controls
-                    >
-                      <track kind="captions" />
-                      O seu navegador não suporta o elemento
-                      {' '}
-                      <code>audio</code>
-                      .
-                    </audio>
-                    <label htmlFor="favorite">
-                      Favoritar
-                      <input
-                        type="checkbox"
-                        label="Favoritar"
-                        name="favorite"
-                        onClick={ () => this.addToFavorite(obj.trackNumber) }
-                      />
-                    </label>
-                  </div>
-                );
+                return <MusicCard data={ obj } key={ obj.trackName } />;
               }
               return (
                 <div key={ obj.artistName }>
