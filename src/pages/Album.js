@@ -3,24 +3,32 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import Loading from '../Loading';
-// import { addSong } from '../services/favoriteSongsAPI';
 import MusicCard from '../components/MusicCard';
+// import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
   constructor() {
     super();
 
-    // this.addToFavorite = this.addToFavorite.bind(this);
-
     this.state = {
       songList: [{}],
       isLoading: false,
+      // favoriteList: [],
     };
   }
 
   componentDidMount() {
     this.getSongs();
+    // this.showFavorites();
   }
+
+  // showFavorites = () => {
+  //   this.setState({ isLoading: true }, async () => {
+  //     const list = await getFavoriteSongs();
+  //     console.log(list);
+  //     this.setState({ favoriteList: list, isLoading: false });
+  //   });
+  // };
 
   getSongs = () => {
     this.setState({ isLoading: true }, async () => {
@@ -32,15 +40,6 @@ class Album extends React.Component {
       this.setState({ songList: songs, isLoading: false });
     });
   };
-
-  // addToFavorite = (number) => {
-  //   this.setState({ isLoadingBox: true }, () => {
-  //     const { songList } = this.state;
-  //     const track = songList.filter((obj) => obj.trackNumber === number);
-  //     addSong(track);
-  //     this.setState({ isLoadingBox: false });
-  //   });
-  // };
 
   render() {
     const { isLoading, songList } = this.state;
