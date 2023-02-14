@@ -38,13 +38,11 @@ class Login extends React.Component {
     const { name } = this.state;
     this.setState({ isLoading: true }, async () => {
       await createUser({ name });
-      // this.setState({ isLoading: false });
       history.push('/search');
     });
   };
 
   render() {
-    // const { name } = this.state;
     const { isNotValid } = this.state;
     const { isLoading } = this.state;
 
